@@ -1,0 +1,17 @@
+#!/usr/bin/env python
+
+"""
+Rate current image with 4 stars
+this is done by appending _#4stars to the filename
+"""
+
+import os, sys
+
+args = sys.argv
+filename = args[1]
+basename, ext = os.path.splitext(filename)
+new_filename = basename + '_#4stars' + ext
+
+os.rename(filename, new_filename)
+
+
