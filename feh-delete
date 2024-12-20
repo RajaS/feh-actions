@@ -5,6 +5,7 @@ import shutil
 
 args = sys.argv
 trash_dir = '/data/tmp/trash'   # modify as reqd
+log_file = os.path.join(trash_dir, 'trash.log')
 
 if len(args) == 1:
     print('Please specify filename')
@@ -24,6 +25,33 @@ def move_file(old_path, new_path):
     """
     shutil.copy(old_path, new_path)
     os.remove(old_path)
+    add_log_entry(old_path, new_path)
+    return
+
+
+def add_log_entry(old_path, new_path):
+    """
+    Add entry to log file with old and new paths
+    delete old entries so only 5 entries are retained
+    """
+    with open(log_file, 'r+') as f:
+        # Read all lines from the file
+        lines = f.readlines()
+
+        # Check if there are more than 5 lines and remove the top entries
+        if len(lines) > 5:
+            lines = lines[1:]
+
+        # Move the file pointer to the beginning of the file to overwrite
+        f.seek(0)
+        f.truncate()  # This is important to clear the existing content
+
+        # Rewrite the remaining lines back to the file
+        f.writelines(lines)
+
+        # Add a new entry at the bottom of the file
+        f.write(old_path + ',' + new_path + '\n')
+        
     return
 
 
