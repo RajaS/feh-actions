@@ -1,0 +1,33 @@
+#!/usr/bin/env python
+
+import os, sys
+import shutil
+
+args = sys.argv
+trash_dir = '/data/tmp/trash'   # modify as reqd
+log_file = os.path.join(trash_dir, 'trash.log')
+
+# undo the last delete made from feh
+# use log file in trash folder to find last deleted file and
+# copy it make to original location
+with open(log_file, 'r') as f:
+    lines = f.readlines()
+    if len(lines) == 0:
+        print('No files to restore')
+        sys.exit()
+
+    last_line = lines[-1]
+    old_path, new_path = last_line.split(',')
+    new_path = new_path.rstrip('\n')
+
+    # move file back
+    shutil.copy(new_path, old_path)
+
+    # remove entry from log file
+    lines = lines[:-1]
+    with open(log_file, 'w') as f:
+        f.writelines(lines)
+
+    print('Restored:', old_path)
+
+
