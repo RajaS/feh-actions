@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+
+import os, sys
+import shutil
+
+args = sys.argv
+
+if len(args) == 1:
+    print('Please specify filename')
+    sys.exit()
+
+# make trash dir if reqd
+trash_dir = '/data/tmp/trash'
+if not os.path.exists(trash_dir):
+    os.makedirs(trash_dir)
+
+
+def move_file(old_path, new_path):
+    """
+    Simplest is os.rename, but fails when the mount points are different (with external drive)
+    shutil.move may or may not have same problems
+    so instead combine shutil.copy and then os.remove
+    ref: https://stackoverflow.com/questions/42392600/oserror-errno-18-invalid-cross-device-link
+    """
+    shutil.copy(old_path, new_path)
+    os.remove(old_path)
+    return
+
+
+jpg_file = args[1]
+
+# canon raw
+canon_raw = os.path.splitext(jpg_file)[0] + '.CR2'
+
+# fuji raw
+fuji_raw = os.path.splitext(jpg_file)[0] + '.RAF'
+
+# move to trash
+# os.rename(jpg_file,
+#           os.path.join(trash_dir, os.path.basename(jpg_file)))
+move_file(jpg_file,
+          os.path.join(trash_dir, os.path.basename(jpg_file)))
+
+if os.path.exists(canon_raw):
+    # os.rename(canon_raw,
+    #           os.path.join(trash_dir, os.path.basename(canon_raw)))
+    move_file(canon_raw,
+              os.path.join(trash_dir, os.path.basename(canon_raw)))
+
+if os.path.exists(fuji_raw):
+    # os.rename(fuji_raw,
+    #           os.path.join(trash_dir, os.path.basename(fuji_raw)))
+    move_file(fuji_raw,
+              os.path.join(trash_dir, os.path.basename(fuji_raw)))
+
+sys.exit()

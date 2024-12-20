@@ -1,0 +1,31 @@
+#!/usr/bin/env python
+
+import os, sys
+import shutil
+
+args = sys.argv
+
+if len(args) == 1:
+    print('Please specify filename')
+    sys.exit()
+
+jpg_file = args[1]
+canon_raw = os.path.splitext(jpg_file)[0] + '.CR2'
+fuji_raw = os.path.splitext(jpg_file)[0] + '.RAF'
+
+# dir for selected files
+sel_dir = os.path.join(os.path.dirname(jpg_file), 'selected')
+
+if not os.path.exists(sel_dir):
+    os.makedirs(sel_dir)
+
+# copy files
+shutil.copy2(jpg_file, sel_dir)
+
+if os.path.exists(canon_raw):
+    shutil.copy2(canon_raw, sel_dir)
+
+if os.path.exists(fuji_raw):
+    shutil.copy2(fuji_raw, sel_dir)
+
+sys.exit()
