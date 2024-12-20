@@ -5,10 +5,6 @@ import shutil
 
 args = sys.argv
 
-if len(args) == 1:
-    print('Please specify filename')
-    sys.exit()
-
 jpg_file = args[1]
 canon_raw = os.path.splitext(jpg_file)[0] + '.CR2'
 fuji_raw = os.path.splitext(jpg_file)[0] + '.RAF'
@@ -22,6 +18,7 @@ if not os.path.exists(sel_dir):
 # copy files
 shutil.copy2(jpg_file, sel_dir)
 
+# if corresponding raw files exist, copy them too
 if os.path.exists(canon_raw):
     shutil.copy2(canon_raw, sel_dir)
 
