@@ -4,13 +4,13 @@ import os, sys
 import shutil
 
 args = sys.argv
+trash_dir = '/data/tmp/trash'   # modify as reqd
 
 if len(args) == 1:
     print('Please specify filename')
     sys.exit()
 
 # make trash dir if reqd
-trash_dir = '/data/tmp/trash'
 if not os.path.exists(trash_dir):
     os.makedirs(trash_dir)
 
@@ -36,20 +36,14 @@ canon_raw = os.path.splitext(jpg_file)[0] + '.CR2'
 fuji_raw = os.path.splitext(jpg_file)[0] + '.RAF'
 
 # move to trash
-# os.rename(jpg_file,
-#           os.path.join(trash_dir, os.path.basename(jpg_file)))
 move_file(jpg_file,
           os.path.join(trash_dir, os.path.basename(jpg_file)))
 
 if os.path.exists(canon_raw):
-    # os.rename(canon_raw,
-    #           os.path.join(trash_dir, os.path.basename(canon_raw)))
     move_file(canon_raw,
               os.path.join(trash_dir, os.path.basename(canon_raw)))
 
 if os.path.exists(fuji_raw):
-    # os.rename(fuji_raw,
-    #           os.path.join(trash_dir, os.path.basename(fuji_raw)))
     move_file(fuji_raw,
               os.path.join(trash_dir, os.path.basename(fuji_raw)))
 
